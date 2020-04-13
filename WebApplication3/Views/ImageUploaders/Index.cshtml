@@ -1,0 +1,132 @@
+﻿@model IEnumerable<WebApplication3.Models.ImageUploader>
+
+@{
+    ViewBag.Title = "Index";
+}
+<style  type="text/css">
+    /*.image {
+        width: 180px;
+        position: relative;
+        display: inline-block;
+    }*/
+    
+    .image:hover img {
+        -webkit-filter: blur(1.7px);
+    }
+
+    .footer {
+        display: none;
+        position: absolute;
+        top: 70%;
+        left:auto;  
+        /*margin-left:15%;*/
+        font-size:30px;
+        font-weight:bold;
+        color:white;
+        
+    }
+    .image:hover .footer {
+        display: table-cell;
+    }
+
+    h2::first-letter{
+        font-size:xx-large;
+        color:aqua; 
+    }
+    h2::first-line{
+        font-variant:small-caps;
+    }
+</style>
+<h2>Index</h2>
+<p>
+    <button class="btn btn-primary" id="createBtn">Add New</button>
+    @*@Html.ActionLink("Create New", "Create")*@
+</p>
+<div class="row" style="justify-content:center; display:block; align-items:center">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4">
+            <div class="image">
+                <div class="center-block" style="width: 18rem;">
+                    <img src="~/Images/@item.Avatar" width="300" height="300" class="center-block" />
+                    <span class="footer"  style="text-align:center;">
+                        <button class="btn btn-success editBtn" value="@item.ID" id="editBtn">Edit</button>
+                        <button class="btn btn-primary detailsBtn" value="@item.ID" id="editBtn">Details</button>
+                        <button class="btn btn-danger deleteBtn" value="@item.ID" id="editBtn">Delete</button>
+                    </span>
+                </div><br /><br />
+            </div>
+        </div>
+    }
+</div>
+<div class="modal fade" id="modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="exampleModalLabel">Form</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @Html.Action("Create")
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    
+<script type="text/javascript">
+    $('#createBtn').on('click', function () {
+        //window.location.href ='@Url.Action("Create")'
+        $('#modal').modal()
+        @*$.ajax({
+            url:@Html.ActionLink("Create", "Create"),
+        })*@
+    })
+
+    $('.editBtn').on('click', function () {
+        var id = $(this).val()
+        $.ajax({
+            url: '@Url.Action("Edit")/' + id,
+            method: "GET",
+            data: { id: id },
+            success: function (res) {
+                window.location.href ='@Url.Action("Edit")/' + id
+            }
+        })
+    })
+
+     $('.detailsBtn').on('click', function () {
+        var id = $(this).val()
+        $.ajax({
+            url: '@Url.Action("Details")/' + id,
+            method: "GET",
+            data: { id: id },
+            success: function (res) {
+                window.location.href ='@Url.Action("Details")/' + id
+            }
+        })
+    })
+
+    $('.deleteBtn').on('click', function () {
+        var id = $(this).val()
+        $.ajax({
+            url: '@Url.Action("Delete")/' + id,
+            method: "GET",
+            data: { id: id },
+            success: function (res) {
+                window.location.href ='@Url.Action("Delete")/' + id
+            }
+        })
+    })
+
+</script>
+    }
+
